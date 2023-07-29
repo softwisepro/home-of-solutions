@@ -1,18 +1,35 @@
-import axios from "axios";
+
+
+
+
 export async function getUser() {
   try {
-    const { data } = await axios.get("/api/auth/session");
 
-    return {
-      user: data,
-      error: null,
-    };
+    const res = await fetch("/api/auth/session");
+    const { user, token, message } = await res.json();
+
+    if (res.ok) {
+      return {
+        user: user,
+        token: token,
+        message: message,
+        error: null,
+      };
+    } else {
+      return {
+        user: null,
+        token: null,
+        message: null,
+        error: null,
+      };
+    }
   } catch (e) {
     const error = e;
-
     return {
       user: null,
-      error,
+      token: null,
+      message: null,
+      error: error,
     };
   }
 }

@@ -57,9 +57,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${mode}`}>
       <body className={inter.className}>
-          <main className='h-screen overflow-hidden'>
-            {children}
-          </main>
+        <main className='h-screen overflow-hidden'>
+          {children}
+        </main>
       </body>
     </html>
   )

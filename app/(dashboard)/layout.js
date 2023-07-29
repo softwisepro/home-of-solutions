@@ -14,7 +14,7 @@ export default function DashboardLayout({children}) {
       const { user, error } = await getUser();
 
       if (error) {
-        push("/");
+        push("/auth/login");
         return;
       }
       setIsSuccess(true);

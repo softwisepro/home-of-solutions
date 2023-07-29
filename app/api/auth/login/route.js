@@ -6,48 +6,82 @@ import { NextResponse } from "next/server";
 const MAX_AGE = 60 * 60 * 24 * 30; // days;
 
 export async function POST(request) {
-  const body = await request.json();
+  const body = await request.json()
 
-  const { username, password } = body;
+  const { email, password } = body;
 
-  if (username !== "admin" || password !== "admin") {
-    return NextResponse.json(
-      {
-        message: "Unauthorized",
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
       },
-      {
-        status: 401,
+      body: JSON.stringify({
+        email,
+        password
+      }),
+    });
+    const data = await res.json();
+    
+    if (data.error) {
+
+      return NextResponse.json({
+        "error": "Something went wrong",
+      });
+
+    } else {
+
+      if (data.mismatch) {
+
+        return NextResponse.json({
+          "mismatch": "Wrong credentials",
+        });
+
+      } else {
+
+        const user_token = data.token;
+        const email = data.user.email;
+
+        const secret = process.env.HOS_SECRET || "";
+        const token = sign(
+          { user_token, email }, secret, { expiresIn: MAX_AGE, }
+        );
+
+        if (token) {
+
+          const seralized = serialize(COOKIE_NAME, token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: MAX_AGE,
+            path: "/",
+          });
+
+          const response = {
+            success: "LogIn success!",
+          };
+
+          return new Response(JSON.stringify(response), {
+            status: 200,
+            headers: { "Set-Cookie": seralized },
+          });
+
+        } else {
+
+          return NextResponse.json({
+            "message": "Unable to LogIn"
+          });
+
+        }
       }
-    );
-  }
-
-  // Always check this
-  const secret = process.env.HOS_SECRET || "";
-
-  const token = sign(
-    {
-      username,
-    },
-    secret,
-    {
-      expiresIn: MAX_AGE,
     }
-  );
+  } catch (error) {
 
-  const seralized = serialize(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: MAX_AGE,
-    path: "/",
-  });
+    console.log(error);
+    return NextResponse.json({
+      "error": "No server response"
+    });
 
-  const response = {
-    message: "Authenticated!",
-  };
 
-  return new Response(JSON.stringify(response), {
-    status: 200,
-    headers: { "Set-Cookie": seralized },
-  });
+  }
 }
