@@ -5,10 +5,10 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: {
-    default: "HOS",
-    template: `%s | HOS`,
+    default: "MARIST BOYS SECONDARY SCHOOL",
+    template: `%s | MARIST BOYS SECONDARY SCHOOL`,
   },
-  description: "House of descriptions",
+  description: "Marist Boys Secondary School",
   keywords: [
     "Next.js",
     "React",
@@ -19,10 +19,10 @@ export const metadata = {
   authors: [
     {
       name: "Home Of Solutions",
-      url: "https://hos.com",
+      url: "https://MBSS.com",
     },
   ],
-  creator: "HOS",
+  creator: "MBSS",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -30,17 +30,17 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hos.com",
-    title: "HOS",
-    description: "House of descriptions",
-    siteName: "HOS",
+    url: "https://MBSS.com",
+    title: "MBSS",
+    description: "Marist Boys Secondary School",
+    siteName: "MBSS",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HOS",
-    description: "House of descriptions",
+    title: "MBSS",
+    description: "Marist Boys Secondary School",
     images: [`og.jpg`],
-    creator: "@HOS",
+    creator: "@MBSS",
   },
   icons: {
     icon: "/favicon.ico",
@@ -52,10 +52,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 
-  const mode = 'light'
-
   return (
-    <html lang="en" className={`${mode}`}>
+    <html lang="en" id='html' >
       <body className={inter.className}>
         <main className='h-screen overflow-hidden'>
           {children}
